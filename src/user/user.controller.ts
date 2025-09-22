@@ -8,6 +8,8 @@ import {
   HttpCode,
   HttpRedirectResponse,
   Redirect,
+  Res,
+  Req,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
@@ -45,6 +47,28 @@ export class UserController {
   //       data: 'Hello World',
   //     });
   //   }
+
+  // View
+  @Get('/view/hello')
+  viewHello(@Query('name') name: string, @Res() response: Response) {
+    response.render('index.html', {
+      title: 'Template Engine',
+      name: name,
+    });
+  }
+
+  // Set cookie menggunakan query
+  @Get('/set-cookie')
+  setCookie(@Query('name') name: string, @Res() response: Response) {
+    response.cookie('name', name);
+    response.status(200).send('Success Set Cookie');
+  }
+
+  // Get cookie
+  @Get('/get-cookie')
+  getCookie(@Req() request: Request): string {
+    return request.cookies['name'];
+  }
 
   // Response menggunakan Response Decorator (yang direkomendasikan)
   @Get('/sample-response')
@@ -102,4 +126,11 @@ export class UserController {
  * @Redirect(location, code) untuk melakukan redirect, lokasi redirect bisa diubah dengan mengembalikan data
  * HttpRedirectResponse pada methodnya
  * @Next() untuk express.NextFunction
+ */
+
+/**
+ * Cookie
+ * Menggunakan cookieParser dari express
+ * Karena cookieParser merupakan plugin dari express, mau tidak mau kita harus menggunakan Request atau Response
+ * dari express juga, tidak menggunakan Request atau Response Decorator
  */
