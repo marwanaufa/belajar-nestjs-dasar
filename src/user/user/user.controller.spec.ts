@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import * as httpMock from 'node-mocks-http';
+import { UserService } from './user.service';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -8,6 +9,8 @@ describe('UserController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
+      imports: [],
+      providers: [UserService],
     }).compile();
 
     controller = module.get<UserController>(UserController);
@@ -15,8 +18,8 @@ describe('UserController', () => {
 
   // Unit test fungsi yang menggunakan decorator dari nestjs langsung
   it('should can say hello', async () => {
-    const response = await controller.sayHello('Marwan', 'Aufa');
-    expect(response).toBe('Hello Marwan Aufa');
+    const response = await controller.sayHello('Marwan');
+    expect(response).toBe('Hello Marwan');
   });
 
   // Unit test fungsi yang menggunakan response atau request dari express
@@ -38,4 +41,8 @@ describe('UserController', () => {
  * Ketika menggunakan response atau request dari express kita akan bingung parameter apa yang harus dimasukan ke
  * req atau res tersebut.
  * Namun ini bisa diatasi dengan menggunakna Object Mock, atau node-mock-http
+ */
+
+/**
+ * Providers juga harus diimportkan ketika melakukan unit test pada unit test controller yang membutuhkan provider lain
  */
